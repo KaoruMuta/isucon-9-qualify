@@ -30,10 +30,10 @@ CREATE TABLE `items` (
   `category_id` int unsigned NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  INDEX idx_category_id (`category_id`),
-  KEY `items_id_IDX` (`id`,`created_at`) USING BTREE,
-  KEY `items_status_IDX` (`status`,`category_id`,`created_at`) USING BTREE
+  INDEX idx_category_id (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4;
+
+CREATE INDEX items_status_IDX USING BTREE ON isucari.items (status,category_id,created_at);
 
 DROP TABLE IF EXISTS `transaction_evidences`;
 CREATE TABLE `transaction_evidences` (
