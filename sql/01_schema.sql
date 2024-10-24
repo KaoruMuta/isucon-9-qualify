@@ -30,7 +30,9 @@ CREATE TABLE `items` (
   `category_id` int unsigned NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  INDEX idx_category_id (`category_id`)
+  INDEX idx_category_id (`category_id`),
+  KEY `items_id_IDX` (`id`,`created_at`) USING BTREE,
+  KEY `items_status_IDX` (`status`,`category_id`,`created_at`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4;
 
 DROP TABLE IF EXISTS `transaction_evidences`;
