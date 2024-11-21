@@ -33,9 +33,14 @@ CREATE TABLE `items` (
   INDEX idx_category_id (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4;
 
-CREATE INDEX items_category_id_IDX USING BTREE ON isucari.items (category_id,id,status);
-CREATE INDEX items_seller_id_IDX USING BTREE ON isucari.items (seller_id,status);
-CREATE INDEX items_status_IDX USING BTREE ON isucari.items (status,id);
+-- CREATE INDEX items_category_id_IDX USING BTREE ON isucari.items (category_id,id,status);
+-- CREATE INDEX items_seller_id_IDX USING BTREE ON isucari.items (seller_id,status);
+-- CREATE INDEX items_status_IDX USING BTREE ON isucari.items (status,id);
+
+CREATE INDEX items_created_at_IDX USING BTREE ON isucari.items (created_at);
+CREATE INDEX items_seller_id_created_at_IDX USING BTREE ON isucari.items (seller_id,created_at);
+CREATE INDEX items_buyer_id_created_at_IDX USING BTREE ON isucari.items (buyer_id,created_at);
+CREATE INDEX items_category_id_created_at_IDX USING BTREE ON isucari.items (category_id,created_at);
 
 DROP TABLE IF EXISTS `transaction_evidences`;
 CREATE TABLE `transaction_evidences` (
