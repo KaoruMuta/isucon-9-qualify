@@ -407,16 +407,24 @@ func getUserSimpleByID(q sqlx.Queryer, userID int64) (userSimple UserSimple, err
 	return userSimple, err
 }
 
+var categories map[int]Category
+
 func getCategoryByID(q sqlx.Queryer, categoryID int) (category Category, err error) {
-	err = sqlx.Get(q, &category, "SELECT * FROM `categories` WHERE `id` = ?", categoryID)
-	if category.ParentID != 0 {
-		parentCategory, err := getCategoryByID(q, category.ParentID)
-		if err != nil {
-			return category, err
-		}
-		category.ParentCategoryName = parentCategory.CategoryName
+	c := categories[categoryID]
+	// err = sqlx.Get(q, &category, "SELECT * FROM `categories` WHERE `id` = ?", categoryID)
+	// if category.ParentID != 0 {
+	// 	parentCategory, err := getCategoryByID(q, category.ParentID)
+	// 	if err != nil {
+	// 		return category, err
+	// 	}
+	// 	category.ParentCategoryName = parentCategory.CategoryName
+	// }
+	// return category, err
+	if c.ParentID != 0 {
+		parent := categories[c.ParentID]
+		c.ParentCategoryName = parent.CategoryName
 	}
-	return category, err
+	return c, nil
 }
 
 func getConfigByName(name string) (string, error) {
@@ -500,6 +508,17 @@ func postInitialize(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json;charset=utf-8")
 	json.NewEncoder(w).Encode(res)
+
+	// Initialize categories
+	c := []Category{}
+	categories = make(map[int]Category)
+	err = sqlx.Select(dbx, &c, "SELECT * FROM `categories`")
+	if err != nil {
+		return
+	}
+	for _, v := range c {
+		categories[v.ID] = v
+	}
 }
 
 func getNewItems(w http.ResponseWriter, r *http.Request) {
