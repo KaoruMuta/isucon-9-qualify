@@ -35,7 +35,7 @@ CREATE TABLE `items` (
 
 CREATE INDEX items_category_id_IDX USING BTREE ON isucari.items (category_id,id,status);
 CREATE INDEX items_seller_id_IDX USING BTREE ON isucari.items (seller_id,status);
-
+CREATE INDEX items_status_IDX USING BTREE ON isucari.items (status,id);
 
 DROP TABLE IF EXISTS `transaction_evidences`;
 CREATE TABLE `transaction_evidences` (
